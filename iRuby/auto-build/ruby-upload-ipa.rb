@@ -317,8 +317,8 @@ if Date.parse('2019-04-20') > Date.today
 
   client = Aliyun::OSS::Client.new(
     endpoint: 'oss-cn-shenzhen.aliyuncs.com',
-    access_key_id: 'LTAIB3U48dRa7G3Y', 
-    access_key_secret: 'GTnrqd01tns5AfBDEV2gkfrmVlQ5me')
+    access_key_id: 'some_key',
+    access_key_secret: 'some_secret')
   
   bucket = client.get_bucket('ios-plist-files')
   bucket.put_object(items_service_file_name, :file => local_item_service_file_path)
