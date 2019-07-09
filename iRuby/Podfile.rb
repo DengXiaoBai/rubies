@@ -6,6 +6,8 @@
 platform :ios, '8.0'
 use_frameworks!
 
+# File.expand_path('../easyrtc_pod.rb', __FILE__) : 根据第二个参数返回第一个参数的abs_path
+# __FILE__: 当前文件路径
 require File.expand_path('../easyrtc_pod.rb', __FILE__)
 extend EasyrtcPod
 
@@ -19,7 +21,7 @@ abstract_target 'CommonPods' do
     pod 'GRMustache', '~> 7.3'
     
     pod 'UITextView+Placeholder', '~> 1.2'
-    pod 'Reveal-iOS-SDK', configurations => ['Debug', 'Debug-without-easyrtc', 'Adhoc']
+    pod 'Reveal-iOS-SDK', :configurations => ['Debug', 'Debug-without-easyrtc', 'Adhoc']
     pod 'MGSwipeTableCell'
     pod 'TTTAttributedLabel'
     
@@ -36,7 +38,8 @@ abstract_target 'CommonPods' do
     pod 'Shimmer', '~> 1.0'
     
     pod 'MBProgressHUD', '~> 1.0.0'
-    
+
+    # 这个是我们自定义的pod方法, 类比下pod方法理解
     easyrtc_pod '283.0.0', :configurations => ['Debug', 'Adhoc', 'Release']
     
     pod 'easyrtc_objc_dummy', :git => "https://github.com/StringsTech/EasyrtcObjcDummy.git", :configuration => 'Debug-without-easyrtc'
@@ -69,6 +72,9 @@ def mute_pushclient_logging(installer)
     installer.pods_project.targets.each do |target|
         if target.name == 'PushClient'
             target.build_configurations.each do |config|
+                #  注意 || 和 && 计算顺序
+                #  config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || ['$(inherited)']
+                #  '$(inherited)': '' 里面的内容一般就是值,没有什么特殊的涵义. 再说ruby里面没有见过 $()
                 config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
                 config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << "_LOG_LEVEL=_LOG_LEVEL_WARN"
             end
@@ -85,7 +91,8 @@ post_install do |installer|
     
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
-            config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
+          # 忽略pod target 警告
+          config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
         end
     end
 

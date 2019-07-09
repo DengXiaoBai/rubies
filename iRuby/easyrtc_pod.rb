@@ -1,3 +1,4 @@
+
 def pingable?(host, timeout=5)
   # 10.0.1.112 not pingable 
   #system "ping -c 1 -t #{timeout} #{host} >/dev/null"
@@ -11,10 +12,9 @@ def logerror(msg)
 end
 
 def loginfo(msg)
-    green = "\033[0;32m"
-    nc = "\033[0m" # No Color
-    STDERR.puts "#{green}#{msg}#{nc}"
-
+  green = "\033[0;32m"
+  nc = "\033[0m" # No Color
+  STDERR.puts "#{green}#{msg}#{nc}"
 end
 
 module EasyrtcPod
